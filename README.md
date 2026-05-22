@@ -51,12 +51,9 @@ this inherently sequential task.
 
 The specific instrument studied is an **Exotic European Best-of Basket Option**:
 
-```
-H  = 100 · H*
-H* = max( S¹_T / S¹_0 ,  S²_T / S²_0 )
-```
+$$H = 100\,H^*, \qquad H^* = \max\left(\frac{S^1_T}{S^1_0},\ \frac{S^2_T}{S^2_0}\right)$$
 
-where `S¹` and `S²` are the prices of two underlying stocks (Apple and Microsoft).
+where $S^1$ and $S^2$ are the prices of two underlying stocks (Apple and Microsoft).
 
 ---
 
@@ -104,18 +101,16 @@ signatures, then **(2)** train deep hedgers on those paths and compare them to B
 
 The 100 000 generated paths are split **70/20/10** into train/validation/test sets.
 
-- **Feed-Forward hedger** — input `[S¹_t, S²_t, T − t]`, output holdings `[φ¹_t, φ²_t]`.
-- **LSTM hedger** — consumes the sequence `x_0, …, x_{T−1}` of `[S¹_t, S²_t, T − t]` vectors,
+- **Feed-Forward hedger** — input $[S^1_t, S^2_t, T-t]$, output holdings $[\phi^1_t, \phi^2_t]$.
+- **LSTM hedger** — consumes the sequence $x_0, \dots, x_{T-1}$ of $[S^1_t, S^2_t, T-t]$ vectors,
   exploiting memory for the sequential task. (The maturity day is excluded — no trade can be
   made on it.)
 - **Loss.** For each path, the sum of squared tracking errors between the change in
   portfolio value and the change in the Black–Scholes option price:
 
-  ```
-  loss_i = Σ_t [ ΔV_{i,t} − ΔH_{i,t} ]²
-  ```
+$$\text{loss}_i = \sum_{t} \left[\Delta V_{i,t} - \Delta H_{i,t}\right]^2$$
 
-  where the portfolio value `V_{i,t}` self-finances from the initial option price `H_0`.
+  where the portfolio value $V_{i,t}$ self-finances from the initial option price $H_0$.
 - **Hyperparameter search.** Conducted with [Optuna](https://optuna.org/) using validation
   loss, with median pruning (only after 10 completed runs and 10 epochs per run). 500 runs ×
   100 epochs for the feed-forward model; 100 runs × 50 epochs for the LSTM. An **untuned
@@ -171,7 +166,7 @@ further.
 
 | | Black–Scholes | Feed-Forward | Tuned LSTM | Untuned LSTM |
 |---|---|---|---|---|
-| **MSE(ΔV − ΔH)** | 1.8570 | 0.7452 | **0.7262** | 1.3326 |
+| **MSE( $\Delta V_t - \Delta H_t$ )** | 1.8570 | 0.7452 | **0.7262** | 1.3326 |
 | **Final PNL** | −1.3963 | −4.8725 | −4.4570 | **0.5634** |
 
 The feed-forward and tuned-LSTM portfolios track the option price most closely on average,
@@ -223,15 +218,16 @@ the conditional distribution of futures, hence the additional testing on generat
 │   ├── Hedger_NN_hp_search_valid.py     # Feed-forward hedger + Optuna hyperparameter search
 │   ├── LSTM.py                          # LSTM hedger + Optuna hyperparameter search
 │   └── compare_PNLs.py                  # Compare PNLs across BS / FF / LSTM models
-├── Write up/                            # Final LaTeX report (main.tex), figures, main.pdf
+├── Write up/                            # LaTeX source (main.tex), figures, bibliography
 ├── Pictures/                            # Architecture diagrams & result figures
+├── BSSNIC010_Honours_Project_Final.pdf  # Final compiled report
 └── README.md
 ```
 
 Data and model artifacts (`data/`, `*.npy`, `*.pkl`) are git-ignored and not committed.
 
-The full report is in [`Write up/main.pdf`](Write%20up/main.pdf), with source in
-[`Write up/main.tex`](Write%20up/main.tex).
+The full report is in [`BSSNIC010_Honours_Project_Final.pdf`](BSSNIC010_Honours_Project_Final.pdf),
+with LaTeX source in [`Write up/main.tex`](Write%20up/main.tex).
 
 ---
 
