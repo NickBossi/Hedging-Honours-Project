@@ -51,7 +51,7 @@ this inherently sequential task.
 
 The specific instrument studied is an **Exotic European Best-of Basket Option**:
 
-$$H = 100\,H^*, \qquad H^* = \max\left(\frac{S^1_T}{S^1_0},\ \frac{S^2_T}{S^2_0}\right)$$
+$$H = 100\,H^{*}, \qquad H^{*} = \max\left(\frac{S^1_T}{S^1_0},\ \frac{S^2_T}{S^2_0}\right)$$
 
 where $S^1$ and $S^2$ are the prices of two underlying stocks (Apple and Microsoft).
 
